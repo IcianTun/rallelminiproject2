@@ -24,8 +24,7 @@ firebase.initializeApp(config);
 // Get a reference to the database service
 var database = firebase.database();
 
-
-var test = database.ref("tuntst/);
+var test = database.ref("rooms/");
 
 
 //CREATE UPDATE DELETE USE SET rer nea oh my godness
@@ -52,12 +51,14 @@ test.on("value", function(data) {
 */
 
 //QUERY USERS of a room + GET LAST INDEX of a room------------
+/*
 var test = database.ref("tuntst/room3");
 test.on("value", function(data){
 	console.log(data.key)
 	console.log(data.val()) // ARRAY [user in room] //calculate last index or anything with this
 	// maybe use set to add data more
 });
+*/
 
 // UPDATE ???
 //database.ref("tuntst/room2/").set("eiei333");
@@ -68,10 +69,33 @@ test.on("value", function(data){
 //database.ref("tuntst/room2").remove();
 
 
-//-------------------------------//
-//----------------------------------------------------------------------
-/*
+// END playground-------------------------------//
+
+
+app.get('/', (req, res) => {
+	res.sendStatus(404);
+});
+
+app.get('/allrooms',(req,res)=>{
+	var tst = database.ref("rooms/");
+	tst.on("value", function(data){
+		console.log(data.val()) // data.val() = rooms
+		res.send(Object.keys(data.val()));
+	});
+});
+/*app.post('/allrooms',(req,res)=>{
+	console.log('POST allrooms reqdata')
+	console.log(req.body);
+	var reqdata = req.body;
+	if (!reqdata.id || rooms.includes(reqdata.id)){
+		res.status(404).send("ROOM_ID already exists");
+	} else {
+		rooms.push(reqdata.id);
+		res.status(201).send(reqdata);
+	}
+});
+*/
 app.listen(3000,()=>{
 	console.log('app is running on port 3000 kub')
 });
-*/
+
