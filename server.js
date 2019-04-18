@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const firebase = require('firebase');
 
 const app = express();
 
@@ -12,6 +13,33 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors());
 
+
+var tstkub;
+//-------------------------------//
+// Set the configuration for your app
+  // TODO: Replace with your project's config object
+  var config = {
+    apiKey: "AIzaSyDRDwUYrkWh9La_pJO411YO75_S-GQsyfE",
+    authDomain: "lll-e2868.firebaseapp.com",
+    databaseURL: "https://lll-e2868.firebaseio.com/",
+    storageBucket: "gs://lll-e2868.appspot.com"
+  };
+  firebase.initializeApp(config);
+
+  // Get a reference to the database service
+  var database = firebase.database();
+  var test = database.ref("test/");
+
+	test.on("value", function(data) {
+		console.log("datakub")
+		console.log(data)
+   /*
+   data.forEach(function(data) {
+      console.log(data.val());
+   });
+   */
+});
+//-------------------------------//
 //---------------
 
 var rooms = [];
