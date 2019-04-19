@@ -83,6 +83,7 @@ app.delete('/allrooms',(req,res)=>{
 			console.log("new roomsname")
 			console.log(roomsname)
 			database.ref("roomsname/").set(roomsname);
+			database.ref("rooms/"+room_ID).set(null);
 			res.status(200).send(req.body);
 		}
 	});
@@ -95,24 +96,6 @@ app.get('/room/:roomX',(req,res)=>{
 	var roomX = req.params.roomX;
 	var tsl = database.ref("rooms/"+roomX);
 	tsl.once("value", function(data){
-		/*
-		if(!data.val()){
-			var clean = data.val().filter(function (el) {
-  				return el != null;
-		});
-<<<<<<< HEAD
-		if(!clean) {
-			res.status(404).send({error:"Room does not exist"})
-		} else {
-			console.log(clean); // data.val() = roomX
-			res.status(200).send(clean);
-			
-			}
-		}
-		else{	
-			res.status(404).send({error:"Room does not exist"})
-		}
-		*/
 		console.log(data.val());
 		if(data.val() === null) {
 			var tsr = database.ref("roomsname/")
@@ -121,8 +104,9 @@ app.get('/room/:roomX',(req,res)=>{
 				console.log(data2.val())
 				if (data2.val().includes(roomX)){
 					res.status(200).send([])
-				}
+				}else{
 				res.status(404).send({error:"Room does not exist"});
+				}
 			})
 			
 		} else {
@@ -139,17 +123,29 @@ app.post('/room/:roomX',(req,res) =>{
 	var idx = -1;
 	var tstka = database.ref("rooms/"+roomX);
 	tstka.once("value", function(data){
+		console.log("data")
+		console.log(data.val())
 		if(!data.val()){
-			res.status(200).send({})
+			tstke = database.ref("roomsname/")
+			tstke.once("value", function(data2){
+				console.log("data2")
+				console.log(data2.val())
+				if (data2.val().includes(roomX)){
+					tstka.set([user]);
+					res.status(200).send({})
+				}else{
+					res.status(404).send({error:"Room does not exist"});
+				}
+			})	
 		}else{
 			var tmp = data.val()
 			var idx = tmp.indexOf(user)
 			if (idx!=-1){
-				res.status(200).send();
+				res.status(200).send({});
 			 }else{
 				tmp.push(user);
 				tstka.set(tmp);
-				res.status(201).send();
+				res.status(201).send({});
 			}
 		}
 	})
@@ -195,9 +191,9 @@ app.delete('/room/:roomX',(req,res) =>{
 		if (idx!=-1){
 			delete tmp[idx]
 			test.set(tmp)
-			res.status(200).send("USERS_ID leaves the rooms")
+			res.status(200).send({body:"USERS_ID leaves the rooms"})
 		 }else{
-			res.status(404).send("User id is not found");
+			res.status(404).send({error:"User id is not found"});
 		}
 		}
 	})
