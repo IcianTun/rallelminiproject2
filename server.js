@@ -129,10 +129,23 @@ app.get('/room/:roomX',(req,res)=>{
 });
 */
 
-
-
-
-
+app.post('/room/:roomX',(req,res) =>{
+	var user = req.body.user;
+	var roomX = req.params.roomX;
+	var idx = -1;
+	var tstka = database.ref("rooms/"+roomX);
+	tstka.once("value", function(data){
+		var tmp = data.val()
+		var idx = tmp.indexOf(user)
+		if (idx!=-1){
+			res.status(200).send();
+		 }else{
+			tmp.push(user);
+			tstka.set(tmp);
+			res.status(201).send();
+		}
+	})
+});
 // Endpoint room
 app.put('/room/:roomX', (req,res) =>{
 	var user = req.body.user;
@@ -156,7 +169,6 @@ app.put('/room/:roomX', (req,res) =>{
 			res.status(201).json({});
 		}
 	})
-
 });
 app.delete('/room/:roomX',(req,res) =>{
 	var user = req.body.user;
@@ -177,7 +189,6 @@ app.delete('/room/:roomX',(req,res) =>{
 		 }else{
 			res.status(404).send("User id is not found");
 		}
-		
 	})
 });
 
