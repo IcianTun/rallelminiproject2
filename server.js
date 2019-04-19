@@ -64,14 +64,14 @@ app.get('/allrooms',(req,res)=>{
 });
 app.post('/allrooms',(req,res)=>{
 	console.log(req.body);
-	var room_ID = req.body;
-	var tst = database.ref("roomsname")
+	var room_ID = req.body.id;
+	var tst = database.ref("roomsname/")
 	tst.once("value", function(data){
 		var roomsname = data.val()
 		if (roomsname.includes(room_ID.id)){
 			res.status(404).send({error:"ROOM_ID already exists"});
 		} else {
-			database.ref("roomsname/").set(roomsname.concat([room_ID]));
+			database.ref("roomsname").set(roomsname.concat([room_ID]));
 			res.status(201).send({id:req.body});
 		}
 	});
