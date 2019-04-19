@@ -117,6 +117,14 @@ app.delete('/allrooms',(req,res)=>{
 	
 });
 
+app.get('/users',(req,res)=>{
+	var user = database.ref("users");
+	user.on("value", function(data){
+		console.log(data.val())
+		res.send(data.val());
+	});
+});
+
 app.listen(3000,()=>{
 	console.log('app is running on port 3000 kub')
 });
