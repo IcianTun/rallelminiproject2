@@ -94,12 +94,17 @@ app.delete('/allrooms',(req,res)=>{
 app.get('/room/:roomX',(req,res)=>{
 	var roomX = req.params.roomX;
 	var tsl = database.ref("rooms/"+roomX);
-	tsl.on("value", function(data){
-		var clean = data.val().filter(function (el) {
-  			return el != null;
+	tsl.once("value", function(data){
+		if(!data.val()) {
+		res.status(404).send({error:"Room does not exist"})
+		} else {
+			var clean = data.val().filter(function (el) {
+  				return el != null;
 		});
-		console.log(clean); // data.val() = roomX
-		res.send(clean);
+			console.log(clean); // data.val() = roomX
+			res.send(clean);
+			
+		}
 	});
 });
 app.post('/room/:roomX',(req,res) =>{
@@ -108,14 +113,18 @@ app.post('/room/:roomX',(req,res) =>{
 	var idx = -1;
 	var tstka = database.ref("rooms/"+roomX);
 	tstka.once("value", function(data){
-		var tmp = data.val()
-		var idx = tmp.indexOf(user)
-		if (idx!=-1){
-			res.status(200).send();
-		 }else{
-			tmp.push(user);
-			tstka.set(tmp);
-			res.status(201).send();
+		if(!data.val()){
+			res.status(200).send({})
+		}else{
+			var tmp = data.val()
+			var idx = tmp.indexOf(user)
+			if (idx!=-1){
+				res.status(200).send();
+			 }else{
+				tmp.push(user);
+				tstka.set(tmp);
+				res.status(201).send();
+			}
 		}
 	})
 });
