@@ -38,16 +38,6 @@ database.ref("tuntst").set({
 
 
 
-//QUERY USERS of a room + GET LAST INDEX of a room------------
-
-var test = database.ref("tuntst/room3");
-test.on("value", function(data){
-	console.log(data.key)
-	console.log(data.val())// ARRAY [user in room] //calculate last index or anything with this
-	// maybe use set to add data more
-	database.ref("tuntst/room55/").set(data.val().concat([4]))
-});
-
 
 // UPDATE ???
 //database.ref("tuntst/room44/").set("eiei333");
@@ -66,62 +56,49 @@ app.get('/', (req, res) => {
 });
 
 app.get('/allrooms',(req,res)=>{
-	var tst = database.ref("rooms/");
+	var tst = database.ref("roomsname/");
 	tst.on("value", function(data){
 		console.log(data.val()) // data.val() = rooms
-		res.send(Object.keys(data.val()));
+		res.send(data.val());
 	});
 });
-
-//get end room
-app.get('/room/:roomX',(req,res)=>{
-	var roomX = req.params.roomX;
-	var tsl = database.ref("rooms/"+roomX);
-	tsl.on("value", function(data){
-		var clean = data.val().filter(function (el) {
-  			return el != null;
-		});
-		console.log(clean); // data.val() = roomX
-		res.send(clean);
-	});
-});
-
-/*app.post('/allrooms',(req,res)=>{
-	console.log('POST allrooms room_ID')
+app.post('/allrooms',(req,res)=>{
 	console.log(req.body);
 	var room_ID = req.body;
-	if (!room_ID.id || rooms.includes(room_ID.id)){
-		res.status(404).send("ROOM_ID already exists");
-	} else {
-		rooms.push(room_ID.id);
-		res.status(201).send(room_ID);
-	}
+	var tst = database.ref("roomsname")
+	tst.on("value", function(data){
+		var roomsname = data.val()
+		if (roomsname.includes(room_ID.id)){
+			res.status(404).send("ROOM_ID already exists");
+		} else {
+			database.ref("roomsname/").set(roomsname.concat([room_ID]));
+			res.status(201).send(room_ID);
+		}
+	});
 });
-*/
 app.put('/allrooms',(req,res)=>{
 	console.log(req.body);
 	var room_ID = req.body.id
-	var tst = database.ref("rooms/");
+	var tst = database.ref("roomsname/");
 	tst.on("value", function(data){
 		//console.log(data.val()) // data.val() = rooms
-		var roomsname = Object.keys(data.val())
+		var roomsname = data.val()
 		console.log(roomsname)
 		if (roomsname.includes(room_ID)){
 			res.status(200).send(req.body);
 		} else {
-			// ADD room to roomsname
+			database.ref("roomsname").set(roomsname.concat([room_ID]))	
 			res.status(201).send(req.body);
 		}
 	});
 });
-
 app.delete('/allrooms',(req,res)=>{
 	console.log(req.body);
 	var room_ID = req.body.id
-	var tst = database.ref("rooms/");
+	var tst = database.ref("roomsname/");
 	tst.on("value", function(data){
 		//console.log(data.val()) // data.val() = rooms
-		var roomsname = Object.keys(data.val())
+		var roomsname = data.val()
 		console.log(roomsname)
 		if (!room_ID || !roomsname.includes(room_ID)){
 			res.status(404).send("Room id is not found");
@@ -133,15 +110,31 @@ app.delete('/allrooms',(req,res)=>{
 });
 
 
+//get end room
+/*
+app.get('/room/:roomX',(req,res)=>{
+	var roomX = req.params.roomX;
+	var tsl = database.ref("rooms/"+roomX);
+	tsl.on("value", function(data){
+		var clean = data.val().filter(function (el) {
+  			return el != null;
+		});
+		console.log(clean); // data.val() = roomX
+		res.send(clean);
+	});
+});
+*/
+
+
 
 
 
 // Endpoint room
+/*
 app.put('/room/roomX', (req,res) =>{
 
-
 });
-
+*/
 app.delete('/room/:roomX',(req,res) =>{
 	var user = req.body.user;
 	var roomX = (req.params.roomX)
@@ -158,13 +151,12 @@ app.delete('/room/:roomX',(req,res) =>{
 			delete tmp[idx]
 			test.set(tmp)
 			res.status(200).send("USERS_ID leaves the rooms")
-		}else{
+		 }else{
 			res.status(404).send("User id is not found");
 		}
 		
 	})
 });
-
 
 app.get('/users',(req,res)=>{
 	var user = database.ref("users");
