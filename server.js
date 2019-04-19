@@ -117,6 +117,38 @@ app.delete('/allrooms',(req,res)=>{
 	
 });
 
+
+
+
+
+// Endpoint room
+app.put('/room/roomX', (req,res) =>{
+
+
+});
+
+app.delete('/room/:roomX',(req,res) =>{
+	var user = req.body.user;
+	var roomX = (req.params.roomX)
+	var idx = 0
+	test.child(roomX).on("value", function(data) {
+		var li = data.val()
+		var li2 = data.key
+		idx = li.indexOf(user)
+	})
+
+	if(idx != -1){
+		database.ref('rooms/'+roomX).child(idx).remove().then(function(){
+				res.status(200).send("USERS_ID leaves the rooms")
+			}).catch(function(error){
+				console.log('Error in deleting.')
+			})
+	}else{
+		res.status(404).send("User id is not found");
+	}
+});
+
+
 app.get('/users',(req,res)=>{
 	var user = database.ref("users");
 	user.on("value", function(data){
