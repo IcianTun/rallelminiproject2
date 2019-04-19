@@ -100,11 +100,13 @@ app.delete('/allrooms',(req,res)=>{
 		//console.log(data.val()) // data.val() = rooms
 		var roomsname = data.val()
 		console.log(roomsname)
-		if (roomsname.includes(room_ID)){
+		if (!roomsname.includes(room_ID)){
 			res.status(404).send({error:"Room id is not found"});
 		} else {
 			var idx = roomsname.indexOf(room_ID)
 			roomsname = roomsname.splice(idx,1);
+			console.log("new roomsname")
+			console.log(roomsname)
 			database.ref("roomsname/").set(roomsname);
 			res.status(200).send(req.body);
 		}
