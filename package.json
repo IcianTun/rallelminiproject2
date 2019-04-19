@@ -1,0 +1,26 @@
+{
+  "name": "rallelminiproject2",
+  "version": "1.0.0",
+  "description": "Miniproject2 2561: LINE-like app management server (10%)",
+  "main": "server.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "firebase": "^5.9.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IcianTun/rallelminiproject2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IcianTun/rallelminiproject2/issues"
+  },
+  "homepage": "https://github.com/IcianTun/rallelminiproject2#readme"
+}
