@@ -130,11 +130,30 @@ app.get('/room/:roomX',(req,res)=>{
 
 
 // Endpoint room
-/*
-app.put('/room/roomX', (req,res) =>{
+app.put('/room/:roomX', (req,res) =>{
+	var user = req.body.user;
+	var roomX = (req.params.roomX)
+	var test = database.ref("rooms/"+roomX);
+	console.log('hello')
+	test.once("value", function(data){
+		//console.log(data.val())
+		var tmp = data.val()
+		console.log(tmp)
+		var idx = tmp.indexOf(user)
+		if (idx!=-1){
+			console.log('if')
+			console.log(tmp)
+			res.status(200).json({})
+		}else{
+			tmp.push(user)
+			test.set(tmp)
+			console.log('else')
+			console.log(tmp)
+			res.status(201).json({});
+		}
+	})
 
 });
-*/
 app.delete('/room/:roomX',(req,res) =>{
 	var user = req.body.user;
 	var roomX = (req.params.roomX)
@@ -142,9 +161,9 @@ app.delete('/room/:roomX',(req,res) =>{
 	console.log(user)
 	console.log(roomX)
 	var test = database.ref("rooms/"+roomX);
-	test.on("value", function(data){
+	test.once("value", function(data){
 		console.log("user in rooms")
-		console.log(data.val())
+		//console.log(data.val())
 		var tmp = data.val()
 		var idx = tmp.indexOf(user)
 		if (idx!=-1){
