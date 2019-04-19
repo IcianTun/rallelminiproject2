@@ -121,7 +121,7 @@ app.get('/users',(req,res)=>{
 	var user = database.ref("users");
 	user.on("value", function(data){
 		console.log(data.val())
-		res.send(data.val());
+		res.status(200).send(data.val());
 	});
 });
 
