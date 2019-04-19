@@ -57,7 +57,7 @@ app.get('/', (req, res) => {
 
 app.get('/allrooms',(req,res)=>{
 	var tst = database.ref("roomsname/");
-	tst.on("value", function(data){
+	tst.once("value", function(data){
 		console.log(data.val()) // data.val() = rooms
 		res.send(data.val());
 	});
@@ -66,13 +66,13 @@ app.post('/allrooms',(req,res)=>{
 	console.log(req.body);
 	var room_ID = req.body;
 	var tst = database.ref("roomsname")
-	tst.on("value", function(data){
+	tst.once("value", function(data){
 		var roomsname = data.val()
 		if (roomsname.includes(room_ID.id)){
 			res.status(404).send({error:"ROOM_ID already exists"});
 		} else {
 			database.ref("roomsname/").set(roomsname.concat([room_ID]));
-			res.status(201).send(req.body);
+			res.status(201).send({id:req.body});
 		}
 	});
 });
@@ -80,7 +80,7 @@ app.put('/allrooms',(req,res)=>{
 	console.log(req.body);
 	var room_ID = req.body.id
 	var tst = database.ref("roomsname/");
-	tst.on("value", function(data){
+	tst.once("value", function(data){
 		//console.log(data.val()) // data.val() = rooms
 		var roomsname = data.val()
 		console.log(roomsname)
@@ -96,15 +96,17 @@ app.delete('/allrooms',(req,res)=>{
 	console.log(req.body);
 	var room_ID = req.body.id
 	var tst = database.ref("roomsname/");
-	tst.on("value", function(data){
+	tst.once("value", function(data){
 		//console.log(data.val()) // data.val() = rooms
 		var roomsname = data.val()
 		console.log(roomsname)
 		if (roomsname.includes(room_ID)){
 			res.status(404).send({error:"Room id is not found"});
 		} else {
-		database.ref("rooms/"+room_ID).remove();
-		res.status(200).send(req.body);
+			var idx = roomsname.indexOf(room_ID)
+			roomsname = roomsname.splice(idx,1);
+			database.ref("roomsname/").set(roomsname);
+			res.status(200).send(req.body);
 		}
 	});
 });
@@ -179,7 +181,7 @@ app.delete('/room/:roomX',(req,res) =>{
 
 app.get('/users',(req,res)=>{
 	var user = database.ref("users");
-	user.on("value", function(data){
+	user.once("value", function(data){
 		console.log(data.val())
 		res.status(200).send(data.val());
 	});
