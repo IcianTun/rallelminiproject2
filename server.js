@@ -99,7 +99,7 @@ app.get('/room/:roomX',(req,res)=>{
   			return el != null;
 		});
 		console.log(clean); // data.val() = roomX
-		res.send(clean);
+		res.status(200).send(clean);
 	});
 });
 app.post('/room/:roomX',(req,res) =>{
