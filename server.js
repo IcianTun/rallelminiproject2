@@ -25,36 +25,11 @@ firebase.initializeApp(config);
 var database = firebase.database();
 //CREATE UPDATE DELETE USE SET rer nea oh my godness
 
-// for reset playground
-/*
-database.ref("tuntst").set({
-	room1:['user1'],
-	room2:['room2user'],
-	room3:['room3user','dum'],
-	room4:[]
-});
-*/
-
-
-
-
-
-// UPDATE ???
-//database.ref("tuntst/room44/").set("eiei333");
-
-
-
-//remove a room
-//database.ref("tuntst/room2").remove();
-
-
-// END playground-------------------------------//
-
-
 app.get('/', (req, res) => {
 	res.sendStatus(404);
 });
 
+//---Allroom--------------------------//
 app.get('/allrooms',(req,res)=>{
 	var tst = database.ref("roomsname/");
 	tst.once("value", function(data){
@@ -112,10 +87,10 @@ app.delete('/allrooms',(req,res)=>{
 		}
 	});
 });
+//---End Allroom--------------------------//
 
 
-//get end room
-/*
+//---Room--------------------------//
 app.get('/room/:roomX',(req,res)=>{
 	var roomX = req.params.roomX;
 	var tsl = database.ref("rooms/"+roomX);
@@ -127,8 +102,6 @@ app.get('/room/:roomX',(req,res)=>{
 		res.send(clean);
 	});
 });
-*/
-
 app.post('/room/:roomX',(req,res) =>{
 	var user = req.body.user;
 	var roomX = req.params.roomX;
@@ -146,7 +119,6 @@ app.post('/room/:roomX',(req,res) =>{
 		}
 	})
 });
-// Endpoint room
 app.put('/room/:roomX', (req,res) =>{
 	var user = req.body.user;
 	var roomX = (req.params.roomX)
@@ -191,7 +163,9 @@ app.delete('/room/:roomX',(req,res) =>{
 		}
 	})
 });
+//---End Room--------------------------//
 
+//---User--------------------------//
 app.get('/users',(req,res)=>{
 	var user = database.ref("users");
 	user.once("value", function(data){
@@ -199,6 +173,8 @@ app.get('/users',(req,res)=>{
 		res.status(200).send(data.val());
 	});
 });
+//---End User--------------------------//
+
 
 app.listen(3000,()=>{
 	console.log('app is running on port 3000 kub')
