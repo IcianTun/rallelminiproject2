@@ -95,15 +95,41 @@ app.get('/room/:roomX',(req,res)=>{
 	var roomX = req.params.roomX;
 	var tsl = database.ref("rooms/"+roomX);
 	tsl.once("value", function(data){
-		if(!data.val()) {
-		res.status(404).send({error:"Room does not exist"})
-		} else {
+		/*
+		if(!data.val()){
 			var clean = data.val().filter(function (el) {
   				return el != null;
 		});
+		if(!clean) {
+			res.status(404).send({error:"Room does not exist"})
+		} else {
 			console.log(clean); // data.val() = roomX
-			res.send(clean);
+			res.status(200).send(clean);
 			
+			}
+		}
+		else{	
+			res.status(404).send({error:"Room does not exist"})
+		}
+		*/
+		console.log(data.val());
+		if(data.val() === null) {
+			var tsr = database.ref("roomsname/")
+			tsr.once("value", function(data2){
+				console.log("data2")
+				console.log(data2.val())
+				if (data2.val().includes(roomX)){
+					res.status(200).send([])
+				}
+				res.status(404).send({error:"Room does not exist"});
+			})
+			
+		} else {
+			var clean = data.val().filter(function (el) {
+  				return el != null;
+			});
+			res.status(200).send(clean);
+
 		}
 	});
 });
@@ -159,6 +185,9 @@ app.delete('/room/:roomX',(req,res) =>{
 	console.log(roomX)
 	var test = database.ref("rooms/"+roomX);
 	test.once("value", function(data){
+		if(!data.val()){
+			res.status(404).send({error:"Room does not exist"})
+		}else{
 		console.log("user in rooms")
 		//console.log(data.val())
 		var tmp = data.val()
@@ -169,6 +198,7 @@ app.delete('/room/:roomX',(req,res) =>{
 			res.status(200).send("USERS_ID leaves the rooms")
 		 }else{
 			res.status(404).send("User id is not found");
+		}
 		}
 	})
 });
