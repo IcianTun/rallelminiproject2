@@ -24,18 +24,22 @@ firebase.initializeApp(config);
 // Get a reference to the database service
 var database = firebase.database();
 
-var test = database.ref("rooms/");
-
-
+/*test.then((successMessage) => {
+	console.log("yay"+successMessage)
+	}).catch((failandrejectedreason) => {
+		console.log('Handle rejected promise ('+reason+') here.')
+	})
+console.log(test)
+*/
 //CREATE UPDATE DELETE USE SET rer nea oh my godness
-/*
+
 // for reset playground
-test.set({
+database.ref("tuntst").set({
 	room1:['user1'],
 	room2:['room2user'],
 	room3:['room3user','dum']
 });
-*/
+
 
 
 /*
@@ -61,7 +65,7 @@ test.on("value", function(data){
 */
 
 // UPDATE ???
-//database.ref("tuntst/room2/").set("eiei333");
+//database.ref("tuntst/room44/").set("eiei333");
 
 
 
@@ -95,6 +99,24 @@ app.get('/allrooms',(req,res)=>{
 	}
 });
 */
+app.delete('/allrooms',(req,res)=>{
+	console.log(req.body);
+	var reqdata = req.body
+	var tst = database.ref("rooms/");
+	tst.on("value", function(data){
+		//console.log(data.val()) // data.val() = rooms
+		var roomsname = Object.keys(data.val())
+		console.log(roomsname)
+		if (!reqdata.id || !roomsname.includes(reqdata.id)){
+			res.status(404).send("Room id is not found");
+		} else {
+		// TODO deletedata
+		res.status(200).send(reqdata);
+	}
+	});
+	
+});
+
 app.listen(3000,()=>{
 	console.log('app is running on port 3000 kub')
 });
