@@ -72,6 +72,17 @@ app.get('/allrooms',(req,res)=>{
 		res.send(Object.keys(data.val()));
 	});
 });
+
+//get end room
+app.get('/rooms/:roomX',(req,res)=>{
+	var roomX = req.params.roomX;
+	var tsl = database.ref("rooms/"+roomX);
+	tsl.on("value", function(data){
+		console.log(data.val()); // data.val() = roomX
+		res.send(data.val());
+	});
+});
+
 /*app.post('/allrooms',(req,res)=>{
 	console.log('POST allrooms room_ID')
 	console.log(req.body);
