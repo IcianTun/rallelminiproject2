@@ -43,11 +43,11 @@ app.post('/allrooms',(req,res)=>{
 	var tst = database.ref("roomsname/")
 	tst.once("value", function(data){
 		var roomsname = data.val()
-		if (roomsname.includes(room_ID.id)){
+		if (roomsname.includes(room_ID)){
 			res.status(404).send({error:"ROOM_ID already exists"});
 		} else {
 			database.ref("roomsname").set(roomsname.concat([room_ID]));
-			res.status(201).send({id:req.body});
+			res.status(201).send(req.body);
 		}
 	});
 });
@@ -79,7 +79,7 @@ app.delete('/allrooms',(req,res)=>{
 			res.status(404).send({error:"Room id is not found"});
 		} else {
 			var idx = roomsname.indexOf(room_ID)
-			roomsname = roomsname.splice(idx,1);
+			roomsname.splice(idx,1);
 			console.log("new roomsname")
 			console.log(roomsname)
 			database.ref("roomsname/").set(roomsname);
@@ -94,12 +94,16 @@ app.delete('/allrooms',(req,res)=>{
 app.get('/room/:roomX',(req,res)=>{
 	var roomX = req.params.roomX;
 	var tsl = database.ref("rooms/"+roomX);
-	tsl.on("value", function(data){
-		var clean = data.val().filter(function (el) {
-  			return el != null;
+	tsl.once("value", function(data){
+		if(!data.val()) {
+		res.status(404).send({error:"Room does not exist"})
+		} else {
+			var clean = data.val().filter(function (el) {
+  				return el != null;
 		});
 		console.log(clean); // data.val() = roomX
 		res.status(200).send(clean);
+		}
 	});
 });
 app.post('/room/:roomX',(req,res) =>{
@@ -108,14 +112,18 @@ app.post('/room/:roomX',(req,res) =>{
 	var idx = -1;
 	var tstka = database.ref("rooms/"+roomX);
 	tstka.once("value", function(data){
-		var tmp = data.val()
-		var idx = tmp.indexOf(user)
-		if (idx!=-1){
-			res.status(200).send();
-		 }else{
-			tmp.push(user);
-			tstka.set(tmp);
-			res.status(201).send();
+		if(!data.val()){
+			res.status(200).send({})
+		}else{
+			var tmp = data.val()
+			var idx = tmp.indexOf(user)
+			if (idx!=-1){
+				res.status(200).send();
+			 }else{
+				tmp.push(user);
+				tstka.set(tmp);
+				res.status(201).send();
+			}
 		}
 	})
 });
