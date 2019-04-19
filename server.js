@@ -68,11 +68,11 @@ app.post('/allrooms',(req,res)=>{
 	var tst = database.ref("roomsname/")
 	tst.once("value", function(data){
 		var roomsname = data.val()
-		if (roomsname.includes(room_ID.id)){
+		if (roomsname.includes(room_ID)){
 			res.status(404).send({error:"ROOM_ID already exists"});
 		} else {
 			database.ref("roomsname").set(roomsname.concat([room_ID]));
-			res.status(201).send({id:req.body});
+			res.status(201).send(req.body);
 		}
 	});
 });
@@ -104,7 +104,7 @@ app.delete('/allrooms',(req,res)=>{
 			res.status(404).send({error:"Room id is not found"});
 		} else {
 			var idx = roomsname.indexOf(room_ID)
-			roomsname = roomsname.splice(idx,1);
+			roomsname.splice(idx,1);
 			console.log("new roomsname")
 			console.log(roomsname)
 			database.ref("roomsname/").set(roomsname);
