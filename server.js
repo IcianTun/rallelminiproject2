@@ -74,12 +74,15 @@ app.get('/allrooms',(req,res)=>{
 });
 
 //get end room
-app.get('/rooms/:roomX',(req,res)=>{
+app.get('/room/:roomX',(req,res)=>{
 	var roomX = req.params.roomX;
 	var tsl = database.ref("rooms/"+roomX);
 	tsl.on("value", function(data){
-		console.log(data.val()); // data.val() = roomX
-		res.send(data.val());
+		var clean = data.val().filter(function (el) {
+  			return el != null;
+		});
+		console.log(clean); // data.val() = roomX
+		res.send(clean);
 	});
 });
 
