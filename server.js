@@ -23,7 +23,7 @@ firebase.initializeApp(config);
 
 // Get a reference to the database service
 var database = firebase.database();
-
+//var test = database.ref("rooms/");
 /*test.then((successMessage) => {
 	console.log("yay"+successMessage)
 	}).catch((failandrejectedreason) => {
@@ -130,22 +130,24 @@ app.put('/room/roomX', (req,res) =>{
 app.delete('/room/:roomX',(req,res) =>{
 	var user = req.body.user;
 	var roomX = (req.params.roomX)
-	var idx = 0
-	test.child(roomX).on("value", function(data) {
-		var li = data.val()
-		var li2 = data.key
-		idx = li.indexOf(user)
+	var idx = -1
+	console.log(user)
+	console.log(roomX)
+	var test = database.ref("rooms/"+roomX);
+	test.on("value", function(data){
+		console.log("user in rooms")
+		console.log(data.val())
+		var tmp = data.val()
+		var idx = tmp.indexOf(user)
+		if (idx!=-1){
+			delete tmp[idx]
+			test.set(tmp)
+			res.status(200).send("USERS_ID leaves the rooms")
+		}else{
+			res.status(404).send("User id is not found");
+		}
+		
 	})
-
-	if(idx != -1){
-		database.ref('rooms/'+roomX).child(idx).remove().then(function(){
-				res.status(200).send("USERS_ID leaves the rooms")
-			}).catch(function(error){
-				console.log('Error in deleting.')
-			})
-	}else{
-		res.status(404).send("User id is not found");
-	}
 });
 
 
