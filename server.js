@@ -69,10 +69,10 @@ app.post('/allrooms',(req,res)=>{
 	tst.on("value", function(data){
 		var roomsname = data.val()
 		if (roomsname.includes(room_ID.id)){
-			res.status(404).send("ROOM_ID already exists");
+			res.status(404).send({error:"ROOM_ID already exists"});
 		} else {
 			database.ref("roomsname/").set(roomsname.concat([room_ID]));
-			res.status(201).send(room_ID);
+			res.status(201).send(req.body);
 		}
 	});
 });
@@ -100,8 +100,8 @@ app.delete('/allrooms',(req,res)=>{
 		//console.log(data.val()) // data.val() = rooms
 		var roomsname = data.val()
 		console.log(roomsname)
-		if (!room_ID || !roomsname.includes(room_ID)){
-			res.status(404).send("Room id is not found");
+		if (roomsname.includes(room_ID)){
+			res.status(404).send({error:"Room id is not found"});
 		} else {
 		database.ref("rooms/"+room_ID).remove();
 		res.status(200).send(req.body);
