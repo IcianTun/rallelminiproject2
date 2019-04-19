@@ -100,6 +100,7 @@ app.get('/room/:roomX',(req,res)=>{
 			var clean = data.val().filter(function (el) {
   				return el != null;
 		});
+<<<<<<< HEAD
 		if(!clean) {
 			res.status(404).send({error:"Room does not exist"})
 		} else {
@@ -129,7 +130,6 @@ app.get('/room/:roomX',(req,res)=>{
   				return el != null;
 			});
 			res.status(200).send(clean);
-
 		}
 	});
 });
