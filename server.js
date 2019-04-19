@@ -23,7 +23,6 @@ firebase.initializeApp(config);
 
 // Get a reference to the database service
 var database = firebase.database();
-
 //CREATE UPDATE DELETE USE SET rer nea oh my godness
 
 // for reset playground
@@ -118,6 +117,40 @@ app.delete('/allrooms',(req,res)=>{
 		}
 	});
 });
+
+
+
+
+
+// Endpoint room
+app.put('/room/roomX', (req,res) =>{
+
+
+});
+
+app.delete('/room/:roomX',(req,res) =>{
+	var user = req.body.user;
+	var roomX = (req.params.roomX)
+	var idx = -1
+	console.log(user)
+	console.log(roomX)
+	var test = database.ref("rooms/"+roomX);
+	test.on("value", function(data){
+		console.log("user in rooms")
+		console.log(data.val())
+		var tmp = data.val()
+		var idx = tmp.indexOf(user)
+		if (idx!=-1){
+			delete tmp[idx]
+			test.set(tmp)
+			res.status(200).send("USERS_ID leaves the rooms")
+		}else{
+			res.status(404).send("User id is not found");
+		}
+		
+	})
+});
+
 
 app.get('/users',(req,res)=>{
 	var user = database.ref("users");
