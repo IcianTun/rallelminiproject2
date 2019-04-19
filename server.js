@@ -31,6 +31,7 @@ app.get('/', (req, res) => {
 
 //---Allroom--------------------------//
 app.get('/allrooms',(req,res)=>{
+	console.log("get all room")
 	var tst = database.ref("roomsname/");
 	tst.once("value", function(data){
 		console.log(data.val()) // data.val() = rooms
@@ -38,6 +39,7 @@ app.get('/allrooms',(req,res)=>{
 	});
 });
 app.post('/allrooms',(req,res)=>{
+	console.log("post all room")
 	console.log(req.body);
 	var room_ID = req.body.id;
 	var tst = database.ref("roomsname/")
@@ -52,6 +54,7 @@ app.post('/allrooms',(req,res)=>{
 	});
 });
 app.put('/allrooms',(req,res)=>{
+	console.log("put all room")
 	console.log(req.body);
 	var room_ID = req.body.id
 	var tst = database.ref("roomsname/");
@@ -68,6 +71,7 @@ app.put('/allrooms',(req,res)=>{
 	});
 });
 app.delete('/allrooms',(req,res)=>{
+	console.log("delete all room")
 	console.log(req.body);
 	var room_ID = req.body.id
 	var tst = database.ref("roomsname/");
@@ -93,6 +97,7 @@ app.delete('/allrooms',(req,res)=>{
 
 //---Room--------------------------//
 app.get('/room/:roomX',(req,res)=>{
+	console.log("get room")
 	var roomX = req.params.roomX;
 	var tsl = database.ref("rooms/"+roomX);
 	tsl.once("value", function(data){
@@ -118,6 +123,7 @@ app.get('/room/:roomX',(req,res)=>{
 	});
 });
 app.post('/room/:roomX',(req,res) =>{
+	console.log("post room")
 	var user = req.body.user;
 	var roomX = req.params.roomX;
 	var idx = -1;
@@ -126,13 +132,13 @@ app.post('/room/:roomX',(req,res) =>{
 		console.log("data")
 		console.log(data.val())
 		if(!data.val()){
-			tstke = database.ref("roomsname/")
+			var tstke = database.ref("roomsname/")
 			tstke.once("value", function(data2){
 				console.log("data2")
 				console.log(data2.val())
 				if (data2.val().includes(roomX)){
 					tstka.set([user]);
-					res.status(200).send({})
+					res.status(201).send({})
 				}else{
 					res.status(404).send({error:"Room does not exist"});
 				}
@@ -151,6 +157,7 @@ app.post('/room/:roomX',(req,res) =>{
 	})
 });
 app.put('/room/:roomX', (req,res) =>{
+	console.log("put room")
 	var user = req.body.user;
 	var roomX = (req.params.roomX)
 	var test = database.ref("rooms/"+roomX);
@@ -174,6 +181,7 @@ app.put('/room/:roomX', (req,res) =>{
 	})
 });
 app.delete('/room/:roomX',(req,res) =>{
+	console.log("delete room")
 	var user = req.body.user;
 	var roomX = (req.params.roomX)
 	var idx = -1
@@ -211,7 +219,7 @@ app.get('/users',(req,res)=>{
 //---End User--------------------------//
 
 
-app.listen(3000,()=>{
-	console.log('app is running on port 3000 kub')
+app.listen(4000,()=>{
+	console.log('app is running on port 4000 kub')
 });
 
