@@ -14,10 +14,11 @@ app.use(cors());
 //-------------------------------//
 // Set fire config 
 var config = {
-	apiKey: "AIzaSyDRDwUYrkWh9La_pJO411YO75_S-GQsyfE",
-	authDomain: "lll-e2868.firebaseapp.com",
-	databaseURL: "https://lll-e2868.firebaseio.com/",
-	storageBucket: "gs://lll-e2868.appspot.com"
+    apiKey: "AIzaSyDbZ-y2kqSdTEB65Prs5AxsXcGk9NQHpfk",
+    authDomain: "lllfirebase.firebaseapp.com",
+    databaseURL: "https://lllfirebase.firebaseio.com",
+    storageBucket: "gs://lllfirebase.appspot.com",
+
 };
 firebase.initializeApp(config);
 
